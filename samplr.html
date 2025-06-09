@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Gauge Meter</title>
+  <style>
+    body {
+      background-color: #1c1c4b;
+      font-family: sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .gauge {
+      position: relative;
+      width: 250px;
+      height: 125px;
+    }
+
+    .gauge .dial {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: conic-gradient(
+        #2c2f5c 0deg 180deg,
+        #00e676 180deg 288deg
+      );
+      border-top-left-radius: 250px;
+      border-top-right-radius: 250px;
+      overflow: hidden;
+    }
+
+    .gauge .needle {
+      position: absolute;
+      width: 4px;
+      height: 100%;
+      background: white;
+      left: 50%;
+      bottom: 0;
+      transform-origin: bottom;
+      transform: rotate(0deg);
+      transition: transform 0.5s ease;
+    }
+
+    .gauge .center {
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      width: 20px;
+      height: 20px;
+      background: white;
+      border-radius: 50%;
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    .gauge .value {
+      position: absolute;
+      bottom: -50px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 32px;
+      color: white;
+    }
+
+    .gauge .labels {
+      position: absolute;
+      width: 100%;
+      top: 100%;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 5px;
+      color: white;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <div class="gauge">
+    <div class="dial"></div>
+    <div class="needle" id="needle"></div>
+    <div class="center"></div>
+    <div class="value" id="value">0</div>
+    <div class="labels">
+      <span>0</span>
+      <span>100</span>
+    </div>
+  </div>
+  <input type="number" id="inputValue" placeholder="Enter 0-100" min="0" max="100" />
+  <button onclick="updateGauge()">Set</button>
+  <script>
+    function updateGauge() {
+    const input = document.getElementById("inputValue");
+    const value = Math.min(100, Math.max(0, parseInt(input.value))); // clamp between 0–100
+    const needle = document.getElementById("needle");
+    const valueText = document.getElementById("value");
+    const degree = (value / 100) * 180;
+    needle.style.transform = `rotate(${degree-90}deg)`;
+    valueText.textContent = value;
+  }
+  </script>
+</body>
+</html>

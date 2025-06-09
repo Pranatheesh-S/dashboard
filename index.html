@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="img-container">
+      <img src="adcons-technologies.jpg" alt="image">
+    </div>
+    <div class="heading">Adcons Technologies</div>
+  </header>
+  <p class="header">VFD Control and monitoring</p>
+
+  <div class="gauges">
+    <!-- Gauge 1 -->
+    <div class="gauge">
+      <div class="dial"></div>
+      <div class="needle" id="needle1"></div>
+      <div class="center"></div>
+      <div class="value" id="value1">0</div>
+      <div class="type" id="type1">FREQUENCY</div>
+      <div class="labels">
+        <span>0</span>
+        <span>100</span>
+      </div>
+    </div>
+    
+    <!-- Gauge 2 -->
+    <div class="gauge">
+      <div class="dial"></div>
+      <div class="needle" id="needle2"></div>
+      <div class="center"></div>
+      <div class="value" id="value2">0</div>
+      <div class="type" id="type2">OUTPUT VOLT</div>
+      <div class="labels">
+        <span>0</span>
+        <span>100</span>
+      </div>
+    </div>
+
+    <!-- Gauge 3 -->
+    <div class="gauge">
+      <div class="dial"></div>
+      <div class="needle" id="needle3"></div>
+      <div class="center"></div>
+      <div class="value" id="value3">0</div>
+      <div class="type" id="type3"2>BUS VOLT</div>
+      <div class="labels">
+        <span>0</span>
+        <span>100</span>
+      </div>
+    </div>
+
+    <!-- Gauge 4 -->
+    <div class="gauge">
+      <div class="dial"></div>
+      <div class="needle" id="needle4"></div>
+      <div class="center"></div>
+      <div class="value" id="value4">0</div>
+      <div class="type" id="type4">OUTPUT AMPS</div>
+      <div class="labels">
+        <span>0</span>
+        <span>100</span>
+      </div>
+    </div>
+  </diV>
+
+  <div class="set-freq">
+  <p>Frequency set</p>
+  <input id="freq-input" type="number" placeholder="Enter frequency in Hz" step="0.01" inputmode="decimal">
+</div>
+
+<div class="display" id="freq-display">
+  <!-- Frequency will appear here -->
+</div>
+
+<script src="script.js"></script>
+<script>
+  setInterval(updatefrequency,1000);
+  setInterval(updatespikes,1000);
+  function updatespikes(){
+    fetch('http://localhost:3000/frequency')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+    const minvalue=Number(data.message.split(',')[1]);
+    const maxvalue=Number(data.message.split(',')[2]);
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+  }
+  function updatefrequency(){
+  fetch('http://localhost:3000/frequency')
+  .then(response => response.json())
+  .then(data => {
+    console.log('Success:', data);
+    const fvalue=Number(data.message.split(',')[0]);
+    const value = Math.min(100, Math.max(0,fvalue)); // clamp between 0–100
+    const needle = document.getElementById("needle1");
+    const valueText = document.getElementById("value1");
+    const degree = (value / 100) * 180;
+    needle.style.transform = `rotate(${degree-90}deg)`;
+    valueText.textContent = value;
+  })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+}
+</script>
+</body>
+</html>
