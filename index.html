@@ -95,23 +95,26 @@
     console.error('Error:', error);
   });
   }
-  function updatefrequency(){
+  function updatefrequency() {
   fetch('http://localhost:3000/frequency')
-  .then(response => response.json())
-  .then(data => {
-    console.log('Success:', data);
-    const fvalue=Number(data.message.split(',')[0]);
-    const value = Math.min(100, Math.max(0,fvalue)); // clamp between 0–100
-    const needle = document.getElementById("needle1");
-    const valueText = document.getElementById("value1");
-    const degree = (value / 5000) * 180;
-    needle.style.transform = `rotate(${degree-90}deg)`;
-    valueText.textContent = value;
-  })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      const fvalue = Number(data.message.split(',')[0]);
+
+      const clamped = Math.min(5000, Math.max(0, fvalue));
+      const needle = document.getElementById("needle1");
+      const valueText = document.getElementById("value1");
+
+      const degree = (clamped / 5000) * 180;
+      needle.style.transform = `rotate(${degree - 90}deg)`; 
+      valueText.textContent = clamped.toFixed(1);
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });
 }
+
 </script>
 </body>
 </html>
