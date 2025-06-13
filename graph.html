@@ -35,7 +35,7 @@
             </div>
             <div class="param">
                 <div class="heading">Frequency Set</div>
-                <div class="getInp"><input type="number" step="0.01"></div>
+                <div class="getInp"><input type="number" id="frequency" step="0.01" onkeypress="update()"></div>
             </div>
             <div class="param">
                 <div class="heading">Motor ON/OFF</div>
@@ -52,12 +52,31 @@
         </div>
     </div>
     <script>
-        setInterval(updation,100);
+         setInterval(updation,100);
+        function update()
+        {
+            const value=document.getElementById("frequency");
+            fetch('http://localhost:3000/setfrequency',{
+                method:'POST',
+                headers: {
+                'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ frequency: value })
+            })
+            .then(response => response.json())
+            .then(data => {
+                // console.log('Success:', data);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
+            console.log("HI");
+        }
         function updation()
         {fetch('http://localhost:3000/frequency')
     .then(response => response.json())
     .then(data => {
-      console.log('Success:', data);
+    //   console.log('Success:', data);
       const fvalue =data.message.split(',')[0];
       document.getElementById("val1").innerHTML=fvalue;
     })

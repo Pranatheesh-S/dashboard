@@ -28,7 +28,7 @@ async def read():
             freqmax = max(freqmax, float_data)
             overallmin=min(float_data,overallmin)
             overallmax=max(float_data,overallmax)
-            print(float_data)
+            #print(float_data)
             current = asyncio.get_event_loop().time()
             with open('frequency.csv','w',newline='') as f:
                 writer=csv.writer(f)
