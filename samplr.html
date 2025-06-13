@@ -94,13 +94,18 @@
   <button onclick="updateGauge()">Set</button>
   <script>
     function updateGauge() {
-    const input = document.getElementById("inputValue");
-    const value = Math.min(100, Math.max(0, parseInt(input.value))); // clamp between 0–100
+       fetch('http://localhost:3000/frequency')
+    .then(response => response.json())
+    .then(data=>{
+        const val=Number(data.message.split(',')[0]);
+    const value = Math.min(100, Math.max(0, val)); // clamp between 0–100
     const needle = document.getElementById("needle");
     const valueText = document.getElementById("value");
     const degree = (value / 100) * 180;
     needle.style.transform = `rotate(${degree-90}deg)`;
     valueText.textContent = value;
+    }
+      )
   }
   </script>
 </body>
