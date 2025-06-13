@@ -1,7 +1,7 @@
 body {
   background-color: black;
   color: white;
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   margin: 0;
   padding: 0;
 }
@@ -25,7 +25,7 @@ body {
   display: flex;
   justify-content: space-around;
   align-items: center;
-  width: 50%;
+  width: 40%;
   padding: 10px 20px;
   border: 1px solid #555;
   margin-left: 40px;
@@ -110,10 +110,19 @@ input:checked + .slider:before {
     width: 100vw;
     height: 90px;
     display: flex;
+    margin-top: 35px;
 }
 
 .title-text{
     font-size: 35px;
     text-align: center;
-    margin-left: 450px;
+    margin-left: 300px;
+}
+
+.logo{
+    margin-left: 35px;
+}
+
+.graph img{
+    width: 650px;
 }
