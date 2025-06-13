@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="graph.css">
+</head>
+<body>
+    <div class="title">
+        <div class="logo">
+            <img src="adcons-technologies.jpg" alt="img">
+        </div>
+        <div class="title-text">
+            <p>VFD CONTROL AND MONITORING</p>
+        </div>
+    </div>
+    <div class="main">
+        <div class="values">
+            <div class="param">
+                <div class="heading">Frequency</div>
+                <div class="value" id="val1"></div>
+            </div>
+            <div class="param">
+                <div class="heading">Bus Volt</div>
+                <div class="value" id="val2"></div>
+            </div>
+            <div class="param">
+                <div class="heading">Output volt</div>
+                <div class="value" id="val3"></div>
+            </div>
+            <div class="param">
+                <div class="heading">Output amps</div>
+                <div class="value" id="val4"></div>
+            </div>
+            <div class="param">
+                <div class="heading">Frequency Set</div>
+                <div class="getInp"><input type="number" step="0.01"></div>
+            </div>
+            <div class="param">
+                <div class="heading">Motor ON/OFF</div>
+                <div class="getInp">
+                    <label class="switch">
+                        <input type="checkbox" />
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        <div class="graph"></div>
+    </div>
+</body>
+</html>
