@@ -4,7 +4,7 @@ const display = document.getElementById('freq-display');
 input.addEventListener('input', () => {
   const value = input.value;
   display.textContent = `Frequency Entered: ${value} Hz`;
-  fetch('http://localhost:3000/update',{
+  fetch('http://localhost:3000/setfrequency',{
     method:'POST',
     headers: {
       'Content-Type': 'application/json'

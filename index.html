@@ -78,11 +78,11 @@
   <!-- Frequency will appear here -->
 </div>
 
-<a href="#"><button>Graph</button></a>
+<a href="samplr.html"><button>Graph</button></a>
 <script src="script.js"></script>
-<script>
-  setInterval(updatefrequency,1000);
-  setInterval(updatespikes,1000);
+<script>  
+  //setInterval(updatefrequency,1000);
+  //setInterval(updatespikes,1000);
   function updatespikes(){
     fetch('http://localhost:3000/frequency')
   .then(response => response.json())

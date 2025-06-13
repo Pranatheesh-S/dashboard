@@ -9,10 +9,10 @@ app.use(cors());
 app.use(express.json());
 //const python=spawn('python',['reading.py']);
 
-app.post('/update',( req, res )=>{
+app.post('/setfrequency',( req, res )=>{
         const data=req.body.frequency;
         //const python1=spawn('python',['writing.py',data]);
-        console.log('frequency has been updated');
+        console.log(`frequency has been updated${data}`);
         res.json({s:'updated frequency'});
 });
 
