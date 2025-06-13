@@ -47,7 +47,23 @@
                 </div>
             </div>
         </div>
-        <div class="graph"></div>
+        <div class="graph">
+            <img src="graph.png">
+        </div>
     </div>
+    <script>
+        setInterval(updation,100);
+        function updation()
+        {fetch('http://localhost:3000/frequency')
+    .then(response => response.json())
+    .then(data => {
+      console.log('Success:', data);
+      const fvalue =data.message.split(',')[0];
+      document.getElementById("val1").innerHTML=fvalue;
+    })
+    .catch(error => {
+      console.error('Error:', error);
+    });}
+    </script>
 </body>
 </html>

@@ -19,7 +19,7 @@ async def write_frequency(value):
     else:
         print(f"Wrote frequency {value} Hz as {registers}")
 
-    await client.close()
+    client.close()
 
 if __name__=='__main__':
-    asyncio.run(write_frequency(sys.argv[1]))
+    asyncio.run(write_frequency(float(sys.argv[1])))

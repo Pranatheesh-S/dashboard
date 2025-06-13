@@ -32,7 +32,7 @@ async def read():
             current = asyncio.get_event_loop().time()
             with open('frequency.csv','w',newline='') as f:
                 writer=csv.writer(f)
-                csv.writerows([[float_data,overallmin,overallmax]])
+                writer.writerows([[float_data], [overallmin], [overallmax]])
             if current >= next_time:
                 timestamp = datetime.now()
                 x.append(timestamp)
