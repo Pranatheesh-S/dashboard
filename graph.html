@@ -47,42 +47,7 @@
                 </div>
             </div>
         </div>
-        <div class="graph">
-            <img src="graph.png">
-        </div>
+        <div class="graph"><img src="graph.png" alt="graph"></div>
     </div>
-    <script>
-         setInterval(updation,100);
-        function update()
-        {
-            const value=document.getElementById("frequency");
-            fetch('http://localhost:3000/setfrequency',{
-                method:'POST',
-                headers: {
-                'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ frequency: value })
-            })
-            .then(response => response.json())
-            .then(data => {
-                // console.log('Success:', data);
-            })
-            .catch(error => {
-                console.error('Error:', error);
-            });
-            console.log("HI");
-        }
-        function updation()
-        {fetch('http://localhost:3000/frequency')
-    .then(response => response.json())
-    .then(data => {
-    //   console.log('Success:', data);
-      const fvalue =data.message.split(',')[0];
-      document.getElementById("val1").innerHTML=fvalue;
-    })
-    .catch(error => {
-      console.error('Error:', error);
-    });}
-    </script>
 </body>
 </html>
