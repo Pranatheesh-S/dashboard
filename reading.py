@@ -2,6 +2,7 @@ import csv
 import asyncio
 import struct
 from datetime import datetime
+from datetime import datetime
 from pymodbus.client import AsyncModbusTcpClient
 
 async def read():
