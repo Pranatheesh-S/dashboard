@@ -7,7 +7,7 @@ let python=null;
 
 app.use(cors());
 app.use(express.json());
-// const python=spawn('python',['reading.py']);
+const python1=spawn('python',['reading.py']);
 
 app.post('/setfrequency',( req, res )=>{
         const data=req.body.frequency;
@@ -16,15 +16,16 @@ app.post('/setfrequency',( req, res )=>{
         res.json({s:'updated frequency'});
 });
 
-app.get('/start',(req,res)=>{
-        python=spawn('python',['dummy.py']);
+app.post('/start',(req,res)=>{
+        const register=req.body.register;
+        python=spawn('python',['displaying.py',register]);
         console.log('started');
         res.json({message:"start"});
 });
 
 app.get('/stop',(req,res)=>{
     if(python==null)
-        return ({message:"not yet started"});
+        return res.json({message:"not yet started"});
     python.kill();
     console.log('stopped');
     res.json({message:"stopped"});
@@ -38,7 +39,7 @@ app.get('/frequency',(req,res)=>{
             console.error('Error reading file:', err);
             return res.status(500).send('Failed to read file.');
         }
-        // console.log('Read file content:', data);
+         console.log('Read file content:', data);
         res.json({message: data});
     });
 });

@@ -109,9 +109,6 @@
     }
 
     .gauge #type1 { bottom: -80px; left: 32%; position: absolute; }
-    .gauge #type2 { bottom: -80px; left: 27%; position: absolute; }
-    .gauge #type3 { bottom: -80px; left: 37%; position: absolute; }
-    .gauge #type4 { bottom: -80px; left: 27%; position: absolute; }
 
     .rotation-section {
       display: flex;
@@ -122,12 +119,27 @@
       flex-wrap: wrap;
     }
 
+    .circle-wrapper {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .motor-label {
+      font-size: 1.3rem;
+      color: white;
+      margin-bottom: 0.5rem;
+      text-align: center;
+    }
+
     .circle-container {
       width: 120px;
       height: 120px;
       display: flex;
       align-items: center;
       justify-content: center;
+      border: 5px solid #00e676;
     }
 
     .circle {
@@ -194,6 +206,7 @@
       font-size: 1rem;
       font-weight: 500;
     }
+
   </style>
 </head>
 <body>
@@ -208,9 +221,8 @@
   <p class="heading">VFD Control and Monitoring</p>
 
   <div class="gauges">
-    
-    <div class="gauge">
-      <div class="dial"></div>
+    <div class="gauge" >
+      <div class="dial" onclick="displaying(2)"></div>
       <div class="needle" id="needle1"></div>
       <div class="center"></div>
       <div class="value" id="value1">0</div>
@@ -219,38 +231,40 @@
     </div>
 
     <div class="gauge">
-      <div class="dial"></div>
-      <div class="needle" id="needle1"></div>
+      <div class="dial" onclick="displaying(4)"></div>
+      <div class="needle" id="needle2"></div>
       <div class="center"></div>
-      <div class="value" id="value1">0</div>
-      <div class="type" id="type1">FREQUENCY</div>
+      <div class="value" id="value2">0</div>
+      <div class="type" id="type2">FREQUENCY</div>
       <div class="labels"><span>0</span><span>100</span></div>
     </div>
 
     <div class="gauge">
-      <div class="dial"></div>
-      <div class="needle" id="needle1"></div>
+      <div class="dial" onclick="displaying(6)"></div>
+      <div class="needle" id="needle3"></div>
       <div class="center"></div>
-      <div class="value" id="value1">0</div>
-      <div class="type" id="type1">FREQUENCY</div>
+      <div class="value" id="value3">0</div>
+      <div class="type" id="type3">FREQUENCY</div>
       <div class="labels"><span>0</span><span>100</span></div>
     </div>
 
     <div class="gauge">
-      <div class="dial"></div>
-      <div class="needle" id="needle1"></div>
+      <div class="dial" onclick="displaying(8)"></div>
+      <div class="needle" id="needle4"></div>
       <div class="center"></div>
-      <div class="value" id="value1">0</div>
-      <div class="type" id="type1">FREQUENCY</div>
+      <div class="value" id="value4">0</div>
+      <div class="type" id="type4">FREQUENCY</div>
       <div class="labels"><span>0</span><span>100</span></div>
-    </div>
-
+    </div>  
   </div>
 
   <div class="rotation-section">
-    <div class="circle-container">
-      <div class="circle" id="rotatingCircle">
-        <div class="pointer"></div>
+    <div class="circle-wrapper">
+      <p class="motor-label">Motor</p>
+      <div class="circle-container">
+        <div class="circle" id="rotatingCircle">
+          <div class="pointer"></div>
+        </div>
       </div>
     </div>
 
@@ -258,7 +272,7 @@
       <p>Frequency Set</p>
       <input id="freq-input" type="number" placeholder="Enter frequency in Hz" step="0.01" inputmode="decimal">
       <div class="display" id="freq-display"></div>
-      <a href="samplr.html"><button>Graph</button></a>
+      <button onclick="stopping()">Graph stop</button>
     </div>
   </div>
 
@@ -273,47 +287,124 @@
     function rotateCircle() {
       const rpm = frequency * 60;
       const degPerSec = (rpm / 60) * 360;
-      angle = (angle + degPerSec / 60) % 360; // 60 FPS 
-      circle.style.transform = `rotate(${angle}deg)`;
+      angle = (angle + degPerSec / 60) % 360; 
+      circle.style.transform =` rotate(${angle}deg)`;
       requestAnimationFrame(rotateCircle);
     }
 
-    input.addEventListener("input", (e) => {
-      frequency = parseFloat(e.target.value) || 0;
-      document.getElementById("freq-display").textContent = `Current Frequency: ${frequency.toFixed(2)} Hz`;
+  input.addEventListener("input", (e) => {
+  frequency = parseFloat(e.target.value) || 0;
 
-      // Send frequency to server
-      fetch('http://localhost:3000/setfrequency', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ frequency: frequency })
-      })
-      .then(response => response.json())
-      .then(data => console.log('Success:', data))
-      .catch(error => console.error('Error:', error));
-    });
+  if (frequency > 50 || frequency < 0) {
+    alert("Frequency must be in the range of 0 to 50");
+    input.value='';
+    frequency=0;
+  } else {
+    display.textContent = `Current Frequency: ${frequency.toFixed(2)} Hz`;
 
-    // Update gauge from server
+    fetch('http://localhost:3000/setfrequency', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ frequency: frequency })
+    })
+    .then(response => response.json())
+    .then(data => console.log('Success:', data))
+    .catch(error => console.error('Error:', error));
+  }
+});
+
+  
+      
+
     function updatefrequency() {
       fetch('http://localhost:3000/frequency')
         .then(response => response.json())
         .then(data => {
+          // console.log(data.message);
+          // console.log(data.message.trim() === "not connected");
+          if(data.message.trim() === "not connected")
+            alert("not connected to Ethernet");
           const fvalue = Number(data.message.split(',')[0]);
+          const bvalue=Number(data.message.split(',')[1]);
+          const cvalue=Number(data.message.split(',')[2]);
+          const dvalue=Number(data.message.split(',')[3]);
           const clamped = Math.min(5000, Math.max(0, fvalue));
           const needle = document.getElementById("needle1");
           const valueText = document.getElementById("value1");
           const degree = (clamped / 5000) * 180;
           needle.style.transform = `rotate(${degree - 90}deg)`;
           valueText.textContent = clamped.toFixed(1);
-        })
-        .catch(error => console.error('Error in frequency:', error));
+        
+
+          const clamped1 = Math.min(5000, Math.max(0, bvalue));
+          const needle1 = document.getElementById("needle2");
+          const valueText1 = document.getElementById("value2");
+          const degree1 = (clamped1 / 5000) * 180;
+          needle1.style.transform = `rotate(${degree1 - 90}deg)`;
+          valueText1.textContent = clamped1.toFixed(1);
+
+          const clamped2 = Math.min(5000, Math.max(0, cvalue));
+          const needle2 = document.getElementById("needle3");
+          const valueText2 = document.getElementById("value3");
+          const degree2 = (clamped2 / 5000) * 180;
+          needle2.style.transform = `rotate(${degree2 - 90}deg)`;
+          valueText2.textContent = clamped2.toFixed(1);
+
+          const clamped3 = Math.min(5000, Math.max(0, dvalue));
+          const needle3 = document.getElementById("needle4");
+          const valueText3 = document.getElementById("value4");
+          const degree3 = (clamped3 / 5000) * 180;
+          needle3.style.transform = `rotate(${degree3 - 90}deg)`;
+          valueText3.textContent = clamped3.toFixed(1);
+
+        }).catch(error => console.error('Error in frequency:', error));
     }
+
+     function displaying(value) {
+    fetch("http://localhost:3000/start", {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ register: value }) 
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log("Started the graph");
+    })
+    .catch(error => {
+        console.error("Error:", error);
+    });
+
+    console.log("Request sent");
+}
+
+    function stopping()
+    {
+      fetch("http://localhost:3000/stop")
+      .then(response=>response.json())
+      .then(data=>
+        {
+            const {message}=data;
+            if(message=="not yet started")
+            {
+              alert("not started the graph");
+            }
+            else{
+              console.log("stopped the graph");
+            }
+          
+        }
+      )
+    }
+
+
 
     setInterval(updatefrequency, 1000);
     rotateCircle();
+
+
   </script>
 
 </body>
 </html>
-
-
