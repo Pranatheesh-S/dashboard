@@ -6,6 +6,7 @@ const fs=require('fs');
 let python=null;
 
 app.use(cors());
+app.use(express.static('frontend'));
 app.use(express.json());
 const python1=spawn('python',['reading.py']);
 
